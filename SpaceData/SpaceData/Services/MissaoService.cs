@@ -3,69 +3,50 @@ using SpaceData.Data;
 using SpaceData.DTOs.Request;
 using SpaceData.DTOs.Response;
 using SpaceData.Mappers;
+using SpaceData.Repositories;
 
 namespace SpaceData.Services;
 
-public class MissaoService
+public class MissaoService(IMissaoRepository repo)
 {
-    private readonly AppDbContext _context;
-    private readonly MissaoMapper _missaoMapper;
-
-    public MissaoService(AppDbContext context, MissaoMapper missaoMapper)
+    public async Task<MissaoResponse> CriarAsync(MissaoRequest req)
     {
-        _context = context;
-        _missaoMapper = missaoMapper;
+        var entity = MissaoMapper.ToEntity(req);
+        entity.IdMissao = Guid.NewGuid().ToString();
+
+        var saved = await repo.AddAsync(entity);
+        return MissaoMapper.ToResponse(saved);
     }
 
-    public MissaoResponse CriarMissao(MissaoRequest missaoRequest)
+    public async Task<MissaoResponse> ObterPorIdAsync(string id)
     {
-        var missao = _missaoMapper.MissaoRequestToEntity(missaoRequest);
-        missao.IdMissao = Guid.NewGuid().ToString();
-
-        _context.Missoes.Add(missao);
-        _context.SaveChanges();
-
-        return _missaoMapper.MissaoToResponse(missao);
+        var entity = await repo.GetByIdAsync(id)
+            ?? throw new KeyNotFoundException($"Missão não encontrada com ID: {id}");
+        return MissaoMapper.ToResponse(entity);
     }
 
-    public MissaoResponse ObterMissaoPorId(string id)
+    public async Task<IEnumerable<MissaoResponse>> ObterTodasAsync() =>
+        (await repo.GetAllAsync()).Select(MissaoMapper.ToResponse);
+
+    public async Task<MissaoResponse> AtualizarAsync(string id, MissaoRequest req)
     {
-        var missao = _context.Missoes.Find(id)
+        var entity = await repo.GetByIdAsync(id)
             ?? throw new KeyNotFoundException($"Missão não encontrada com ID: {id}");
 
-        return _missaoMapper.MissaoToResponse(missao);
+        entity.NomeMissao = req.NomeMissao;
+        entity.DtInicio = req.DtInicio;
+        entity.DuracaoEstimada = req.DuracaoEstimada;
+        entity.Descricao = req.Descricao;
+        entity.Status = req.Status;
+
+        var updated = await repo.UpdateAsync(entity);
+        return MissaoMapper.ToResponse(updated);
     }
 
-    public List<MissaoResponse> ObterTodasMissoes()
+    public async Task DeletarAsync(string id)
     {
-        return _context.Missoes
-            .AsNoTracking()
-            .Select(m => _missaoMapper.MissaoToResponse(m))
-            .ToList();
-    }
-
-    public MissaoResponse AtualizarMissao(string id, MissaoRequest missaoRequest)
-    {
-        var missao = _context.Missoes.Find(id)
-            ?? throw new KeyNotFoundException($"Missão não encontrada com ID: {id}");
-
-        missao.NomeMissao = missaoRequest.NomeMissao;
-        missao.DtInicio = missaoRequest.DtInicio;
-        missao.DuracaoEstimada = missaoRequest.DuracaoEstimada;
-        missao.Descricao = missaoRequest.Descricao;
-        missao.Status = missaoRequest.Status;
-
-        _context.SaveChanges();
-
-        return _missaoMapper.MissaoToResponse(missao);
-    }
-
-    public void DeletarMissao(string id)
-    {
-        var missao = _context.Missoes.Find(id)
-            ?? throw new KeyNotFoundException($"Missão não encontrada com ID: {id}");
-
-        _context.Missoes.Remove(missao);
-        _context.SaveChanges();
+        if (!await repo.DeleteAsync(id))
+            throw new KeyNotFoundException($"Missão não encontrada com ID: {id}");
     }
 }
+

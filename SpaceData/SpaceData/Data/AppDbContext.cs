@@ -3,10 +3,8 @@ using SpaceData.Models;
 
 namespace SpaceData.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-
     public DbSet<Agente> Agentes => Set<Agente>();
     public DbSet<Missao> Missoes => Set<Missao>();
     public DbSet<AgenteMissao> AgenteMissoes => Set<AgenteMissao>();
@@ -16,9 +14,11 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Agente>(entity =>
         {
             entity.HasKey(a => a.IdAgente);
-            entity.Property(a => a.Nome).IsRequired().HasMaxLength(150);
-            entity.Property(a => a.Especialidade).IsRequired().HasMaxLength(100);
-            entity.Property(a => a.Status).HasConversion<string>();
+            entity.Property(a => a.IdAgente).HasColumnName("ID_AGENTE");
+            entity.Property(a => a.Nome).IsRequired().HasMaxLength(150).HasColumnName("NM_AGENTE");
+            entity.Property(a => a.DtNascimento).HasColumnName("DT_NASCIMENTO");
+            entity.Property(a => a.Status).HasConversion<string>().HasColumnName("ST_AGENTE");
+            entity.Property(a => a.Especialidade).IsRequired().HasMaxLength(100).HasColumnName("ESPECIALIDADE");
         });
 
         modelBuilder.Entity<Missao>(entity =>
@@ -35,11 +35,13 @@ public class AppDbContext : DbContext
 
             entity.HasOne(am => am.Agente)
                   .WithMany(a => a.AgenteMissoes)
-                  .HasForeignKey(am => am.IdAgente);
+                  .HasForeignKey(am => am.IdAgente)
+                  .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(am => am.Missao)
                   .WithMany(m => m.AgenteMissoes)
-                  .HasForeignKey(am => am.IdMissao);
+                  .HasForeignKey(am => am.IdMissao)
+                  .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

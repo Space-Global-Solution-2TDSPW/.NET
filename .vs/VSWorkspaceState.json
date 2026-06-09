@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\SpaceData",
-    "\\SpaceData\\SpaceData\\Data"
+    "\\SpaceData\\SpaceData",
+    "\\SpaceData\\SpaceData\\Services"
   ],
-  "SelectedNode": "\\SpaceData\\SpaceData.sln",
+  "SelectedNode": "\\SpaceData\\SpaceData\\Services\\AgenteService.cs",
   "PreviewInSolutionExplorer": false
 }

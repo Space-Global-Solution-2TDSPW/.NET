@@ -10,5 +10,7 @@ public class AgenteMissaoRequest
     [Required(ErrorMessage = "ID da missão é obrigatório")]
     public string IdMissao { get; set; } = string.Empty;
 
-    public string RelatorioMissao { get; set; }
+    [Required(ErrorMessage = "Relatório da missão é obrigatório")]
+    [StringLength(500, MinimumLength = 1, ErrorMessage = "Relatório deve ter entre 1 e 500 caracteres")]
+    public string RelatorioMissao { get; set; } = string.Empty;
 }

@@ -6,65 +6,44 @@ using SpaceData.Mappers;
 
 namespace SpaceData.Services;
 
-public class AgenteService
+public class AgenteService(IAgenteRepository repo)
 {
-    private readonly AppDbContext _context;
-    private readonly AgenteMapper _agenteMapper;
-
-    public AgenteService(AppDbContext context, AgenteMapper agenteMapper)
+    public async Task<AgenteResponse> CriarAsync(AgenteRequest req)
     {
-        _context = context;
-        _agenteMapper = agenteMapper;
+        var entity = AgenteMapper.ToEntity(req);
+        entity.IdAgente = Guid.NewGuid().ToString();
+
+        var saved = await repo.AddAsync(entity);
+        return AgenteMapper.ToResponse(saved);
     }
 
-    public AgenteResponse CriarAgente(AgenteRequest agenteRequest)
+    public async Task<AgenteResponse> ObterPorIdAsync(string id)
     {
-        var agente = _agenteMapper.AgenteRequestToEntity(agenteRequest);
-        agente.IdAgente = Guid.NewGuid().ToString();
-
-        _context.Agentes.Add(agente);
-        _context.SaveChanges();
-
-        return _agenteMapper.AgenteToResponse(agente);
+        var entity = await repo.GetByIdAsync(id)
+            ?? throw new KeyNotFoundException($"Agente não encontrado com ID: {id}");
+        return AgenteMapper.ToResponse(entity);
     }
 
-    public AgenteResponse ObterAgentePorId(string id)
+    public async Task<IEnumerable<AgenteResponse>> ObterTodosAsync() =>
+        (await repo.GetAllAsync()).Select(AgenteMapper.ToResponse);
+
+    public async Task<AgenteResponse> AtualizarAsync(string id, AgenteRequest req)
     {
-        var agente = _context.Agentes.Find(id)
+        var entity = await repo.GetByIdAsync(id)
             ?? throw new KeyNotFoundException($"Agente não encontrado com ID: {id}");
 
-        return _agenteMapper.AgenteToResponse(agente);
+        entity.Nome = req.Nome;
+        entity.DtNascimento = req.DtNascimento;
+        entity.Status = req.Status;
+        entity.Especialidade = req.Especialidade;
+
+        var updated = await repo.UpdateAsync(entity);
+        return AgenteMapper.ToResponse(updated);
     }
 
-    public List<AgenteResponse> ObterTodosAgentes()
+    public async Task DeletarAsync(string id)
     {
-        return _context.Agentes
-            .AsNoTracking()
-            .Select(a => _agenteMapper.AgenteToResponse(a))
-            .ToList();
-    }
-
-    public AgenteResponse AtualizarAgente(string id, AgenteRequest agenteRequest)
-    {
-        var agente = _context.Agentes.Find(id)
-            ?? throw new KeyNotFoundException($"Agente não encontrado com ID: {id}");
-
-        agente.Nome = agenteRequest.Nome;
-        agente.DtNascimento = agenteRequest.DtNascimento;
-        agente.Status = agenteRequest.Status;
-        agente.Especialidade = agenteRequest.Especialidade;
-
-        _context.SaveChanges();
-
-        return _agenteMapper.AgenteToResponse(agente);
-    }
-
-    public void DeletarAgente(string id)
-    {
-        var agente = _context.Agentes.Find(id)
-            ?? throw new KeyNotFoundException($"Agente não encontrado com ID: {id}");
-
-        _context.Agentes.Remove(agente);
-        _context.SaveChanges();
+        if (!await repo.DeleteAsync(id))
+            throw new KeyNotFoundException($"Agente não encontrado com ID: {id}");
     }
 }

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SpaceData.DTOs.Request;
 using SpaceData.DTOs.Response;
 using SpaceData.Services;
@@ -7,87 +7,62 @@ namespace SpaceData.Controllers;
 
 [ApiController]
 [Route("api/missao")]
-public class MissaoController : ControllerBase
+[Produces("application/json")]
+[Tags("Missão")]
+public class MissaoController(MissaoService service) : ControllerBase
 {
-    private readonly MissaoService _missaoService;
-
-    public MissaoController(MissaoService missaoService)
-    {
-        _missaoService = missaoService;
-    }
-
     /// <summary>Cadastrar missão</summary>
     /// <remarks>Cria uma nova missão espacial no sistema</remarks>
     [HttpPost]
-    public IActionResult CriarMissao([FromBody] MissaoRequest missaoRequest)
+    [ProducesResponseType(typeof(MissaoResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Criar([FromBody] MissaoRequest req)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        var response = _missaoService.CriarMissao(missaoRequest);
-        return CreatedAtAction(nameof(BuscarMissaoPorId), new { id = response.IdMissao }, response);
+        var result = await service.CriarAsync(req);
+        return CreatedAtAction(nameof(BuscarPorId), new { id = result.IdMissao }, result);
     }
 
     /// <summary>Buscar missão por ID</summary>
     /// <remarks>Retorna os dados de uma missão a partir do seu ID</remarks>
     /// <param name="id">ID UUID da missão</param>
     [HttpGet("{id}")]
-    public IActionResult BuscarMissaoPorId([FromRoute] string id)
+    [ProducesResponseType(typeof(MissaoResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> BuscarPorId(string id)
     {
-        try
-        {
-            var response = _missaoService.ObterMissaoPorId(id);
-            return Ok(response);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { mensagem = ex.Message });
-        }
+        try { return Ok(await service.ObterPorIdAsync(id)); }
+        catch (KeyNotFoundException e) { return NotFound(new { message = e.Message }); }
     }
 
     /// <summary>Listar todas as missões</summary>
     /// <remarks>Retorna uma lista com todas as missões cadastradas no sistema</remarks>
     [HttpGet]
-    public IActionResult ListarMissoes()
-    {
-        var response = _missaoService.ObterTodasMissoes();
-        return Ok(response);
-    }
+    [ProducesResponseType(typeof(IEnumerable<MissaoResponse>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> Listar() => Ok(await service.ObterTodasAsync());
 
     /// <summary>Atualizar missão</summary>
     /// <remarks>Atualiza os dados de uma missão existente</remarks>
     /// <param name="id">ID UUID da missão</param>
     [HttpPut("{id}")]
-    public IActionResult AtualizarMissao([FromRoute] string id, [FromBody] MissaoRequest missaoRequest)
+    [ProducesResponseType(typeof(MissaoResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Atualizar(string id, [FromBody] MissaoRequest req)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        try
-        {
-            var response = _missaoService.AtualizarMissao(id, missaoRequest);
-            return Ok(response);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { mensagem = ex.Message });
-        }
+        try { return Ok(await service.AtualizarAsync(id, req)); }
+        catch (KeyNotFoundException e) { return NotFound(new { message = e.Message }); }
     }
 
     /// <summary>Deletar missão</summary>
     /// <remarks>Remove o cadastro de uma missão do sistema</remarks>
     /// <param name="id">ID UUID da missão</param>
     [HttpDelete("{id}")]
-    public IActionResult DeletarMissao([FromRoute] string id)
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Deletar(string id)
     {
-        try
-        {
-            _missaoService.DeletarMissao(id);
-            return NoContent();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { mensagem = ex.Message });
-        }
+        try { await service.DeletarAsync(id); return NoContent(); }
+        catch (KeyNotFoundException e) { return NotFound(new { message = e.Message }); }
     }
 }
+

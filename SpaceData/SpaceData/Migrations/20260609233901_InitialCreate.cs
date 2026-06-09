@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -17,7 +16,7 @@ namespace SpaceData.Migrations
                 {
                     ID_AGENTE = table.Column<string>(type: "NVARCHAR2(450)", nullable: false),
                     NM_AGENTE = table.Column<string>(type: "NVARCHAR2(150)", maxLength: 150, nullable: false),
-                    DtNascimento = table.Column<DateTime>(type: "TIMESTAMP(7)", nullable: false),
+                    DT_NASCIMENTO = table.Column<string>(type: "NVARCHAR2(10)", nullable: false),
                     ST_AGENTE = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
                     ESPECIALIDADE = table.Column<string>(type: "NVARCHAR2(100)", maxLength: 100, nullable: false)
                 },
@@ -30,53 +29,53 @@ namespace SpaceData.Migrations
                 name: "T_MISSAO",
                 columns: table => new
                 {
-                    ID_MISSAO = table.Column<string>(type: "NVARCHAR2(450)", nullable: false),
-                    NM_MISSAO = table.Column<string>(type: "NVARCHAR2(150)", maxLength: 150, nullable: false),
-                    DT_INICIO = table.Column<DateTime>(type: "TIMESTAMP(7)", nullable: false),
-                    DURACAO_ESTIMADA = table.Column<int>(type: "NUMBER(10)", nullable: false),
-                    Descrição = table.Column<string>(type: "NVARCHAR2(500)", maxLength: 500, nullable: false),
-                    ST_MISSAO = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false)
+                    IdMissao = table.Column<string>(type: "NVARCHAR2(450)", nullable: false),
+                    NomeMissao = table.Column<string>(type: "NVARCHAR2(150)", maxLength: 150, nullable: false),
+                    DtInicio = table.Column<string>(type: "NVARCHAR2(10)", nullable: false),
+                    DuracaoEstimada = table.Column<int>(type: "NUMBER(10)", nullable: false),
+                    Descricao = table.Column<string>(type: "NVARCHAR2(500)", maxLength: 500, nullable: false),
+                    Status = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_T_MISSAO", x => x.ID_MISSAO);
+                    table.PrimaryKey("PK_T_MISSAO", x => x.IdMissao);
                 });
 
             migrationBuilder.CreateTable(
                 name: "T_AGENTE_MISSAO",
                 columns: table => new
                 {
-                    ID_AGENTE_MISSAO = table.Column<string>(type: "NVARCHAR2(450)", nullable: false),
-                    ID_AGENTE = table.Column<string>(type: "NVARCHAR2(450)", nullable: false),
-                    ID_MISSAO = table.Column<string>(type: "NVARCHAR2(450)", nullable: false),
-                    DESCRICAO = table.Column<string>(type: "NVARCHAR2(500)", maxLength: 500, nullable: false)
+                    IdAgenteMissao = table.Column<string>(type: "NVARCHAR2(450)", nullable: false),
+                    IdAgente = table.Column<string>(type: "NVARCHAR2(450)", nullable: false),
+                    IdMissao = table.Column<string>(type: "NVARCHAR2(450)", nullable: false),
+                    RelatorioMissao = table.Column<string>(type: "NVARCHAR2(500)", maxLength: 500, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_T_AGENTE_MISSAO", x => x.ID_AGENTE_MISSAO);
+                    table.PrimaryKey("PK_T_AGENTE_MISSAO", x => x.IdAgenteMissao);
                     table.ForeignKey(
-                        name: "FK_T_AGENTE_MISSAO_T_AGENTE_ID_AGENTE",
-                        column: x => x.ID_AGENTE,
+                        name: "FK_T_AGENTE_MISSAO_T_AGENTE_IdAgente",
+                        column: x => x.IdAgente,
                         principalTable: "T_AGENTE",
                         principalColumn: "ID_AGENTE",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_T_AGENTE_MISSAO_T_MISSAO_ID_MISSAO",
-                        column: x => x.ID_MISSAO,
+                        name: "FK_T_AGENTE_MISSAO_T_MISSAO_IdMissao",
+                        column: x => x.IdMissao,
                         principalTable: "T_MISSAO",
-                        principalColumn: "ID_MISSAO",
+                        principalColumn: "IdMissao",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_T_AGENTE_MISSAO_ID_AGENTE",
+                name: "IX_T_AGENTE_MISSAO_IdAgente",
                 table: "T_AGENTE_MISSAO",
-                column: "ID_AGENTE");
+                column: "IdAgente");
 
             migrationBuilder.CreateIndex(
-                name: "IX_T_AGENTE_MISSAO_ID_MISSAO",
+                name: "IX_T_AGENTE_MISSAO_IdMissao",
                 table: "T_AGENTE_MISSAO",
-                column: "ID_MISSAO");
+                column: "IdMissao");
         }
 
         /// <inheritdoc />

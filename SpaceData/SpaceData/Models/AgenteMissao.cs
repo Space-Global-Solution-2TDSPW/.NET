@@ -1,6 +1,5 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SpaceData.Models;
 
@@ -8,21 +7,20 @@ namespace SpaceData.Models;
 public class AgenteMissao
 {
     [Key]
-    [Column("ID_AGENTE_MISSAO")]
-    public string IdAgenteMissao { get; set; }
+    public string IdAgenteMissao { get; set; } = string.Empty;
 
-    [ForeignKey(nameof(Agente))]
-    [Column("ID_AGENTE")]
-    public string IdAgente { get; set; }
+    [Required]
+    public string IdAgente { get; set; } = string.Empty;
 
-    [ForeignKey(nameof(Missao))]
-    [Column("ID_MISSAO")]
-    public string IdMissao { get; set; }
+    [ForeignKey(nameof(IdAgente))]
+    public Agente Agente { get; set; } = null!;
+
+    [Required]
+    public string IdMissao { get; set; } = string.Empty;
+
+    [ForeignKey(nameof(IdMissao))]
+    public Missao Missao { get; set; } = null!;
 
     [Required, MaxLength(500)]
-    [Column("DESCRICAO")]
-    public string RelatorioMissao { get; set; }
-
-    public Agente Agente { get; set; } = null!;
-    public Missao Missao { get; set; } = null!;
+    public string RelatorioMissao { get; set; } = string.Empty;
 }

@@ -3,96 +3,67 @@ using SpaceData.Data;
 using SpaceData.DTOs.Request;
 using SpaceData.DTOs.Response;
 using SpaceData.Mappers;
+using SpaceData.Repositories;
 
 namespace SpaceData.Services;
 
-public class AgenteMissaoService
+public class AgenteMissaoService(
+    IAgenteMissaoRepository repo,
+    IAgenteRepository agenteRepo,
+    IMissaoRepository missaoRepo)
 {
-    private readonly AppDbContext _context; 
-    private readonly AgenteMissaoMapper _agenteMissaoMapper;
-
-    public AgenteMissaoService(AppDbContext context, AgenteMissaoMapper agenteMissaoMapper)
+    public async Task<AgenteMissaoResponse> CriarAsync(AgenteMissaoRequest req)
     {
-        _context = context;
-        _agenteMissaoMapper = agenteMissaoMapper;
+        if (!await agenteRepo.ExistsAsync(req.IdAgente))
+            throw new KeyNotFoundException($"Agente não encontrado com ID: {req.IdAgente}");
+
+        if (!await missaoRepo.ExistsAsync(req.IdMissao))
+            throw new KeyNotFoundException($"Missão não encontrada com ID: {req.IdMissao}");
+
+        var entity = AgenteMissaoMapper.ToEntity(req);
+        entity.IdAgenteMissao = Guid.NewGuid().ToString();
+
+        await repo.AddAsync(entity);
+
+        var full = await repo.GetByIdAsync(entity.IdAgenteMissao);
+        return AgenteMissaoMapper.ToResponse(full!);
     }
 
-    public AgenteMissaoResponse CriarAgenteMissao(AgenteMissaoRequest request)
+    public async Task<AgenteMissaoResponse> ObterPorIdAsync(string id)
     {
-        _ = _context.Agentes.Find(request.IdAgente)
-            ?? throw new KeyNotFoundException($"Agente não encontrado com ID: {request.IdAgente}");
-
-        _ = _context.Missoes.Find(request.IdMissao)
-            ?? throw new KeyNotFoundException($"Missão não encontrada com ID: {request.IdMissao}");
-
-        var agenteMissao = _agenteMissaoMapper.AgenteMissaoRequestToEntity(request);
-        agenteMissao.IdAgenteMissao = Guid.NewGuid().ToString();
-
-        _context.AgenteMissoes.Add(agenteMissao);
-        _context.SaveChanges();
-
-        var saved = _context.AgenteMissoes
-            .Include(am => am.Agente)
-            .Include(am => am.Missao)
-            .First(am => am.IdAgenteMissao == agenteMissao.IdAgenteMissao);
-
-        return _agenteMissaoMapper.AgenteMissaoToResponse(saved);
+        var entity = await repo.GetByIdAsync(id)
+            ?? throw new KeyNotFoundException($"Vínculo AgenteMissão não encontrado com ID: {id}");
+        return AgenteMissaoMapper.ToResponse(entity);
     }
 
-    public AgenteMissaoResponse ObterAgenteMissaoPorId(string id)
-    {
-        var agenteMissao = _context.AgenteMissoes
-            .Include(am => am.Agente)
-            .Include(am => am.Missao)
-            .FirstOrDefault(am => am.IdAgenteMissao == id)
-            ?? throw new KeyNotFoundException($"Vínculo AgenteMissao não encontrado com ID: {id}");
+    public async Task<IEnumerable<AgenteMissaoResponse>> ObterTodosAsync() =>
+        (await repo.GetAllAsync()).Select(AgenteMissaoMapper.ToResponse);
 
-        return _agenteMissaoMapper.AgenteMissaoToResponse(agenteMissao);
+    public async Task<AgenteMissaoResponse> AtualizarAsync(string id, AgenteMissaoRequest req)
+    {
+        var entity = await repo.GetByIdAsync(id)
+            ?? throw new KeyNotFoundException($"Vínculo AgenteMissão não encontrado com ID: {id}");
+
+        if (!await agenteRepo.ExistsAsync(req.IdAgente))
+            throw new KeyNotFoundException($"Agente não encontrado com ID: {req.IdAgente}");
+
+        if (!await missaoRepo.ExistsAsync(req.IdMissao))
+            throw new KeyNotFoundException($"Missão não encontrada com ID: {req.IdMissao}");
+
+        entity.IdAgente = req.IdAgente;
+        entity.IdMissao = req.IdMissao;
+        entity.RelatorioMissao = req.RelatorioMissao;
+
+        await repo.UpdateAsync(entity);
+
+        var full = await repo.GetByIdAsync(entity.IdAgenteMissao);
+        return AgenteMissaoMapper.ToResponse(full!);
     }
 
-    public List<AgenteMissaoResponse> ObterTodosAgenteMissoes()
+    public async Task DeletarAsync(string id)
     {
-        return _context.AgenteMissoes
-            .Include(am => am.Agente)
-            .Include(am => am.Missao)
-            .AsNoTracking() 
-            .Select(am => _agenteMissaoMapper.AgenteMissaoToResponse(am))
-            .ToList();
-    }
-
-    public AgenteMissaoResponse AtualizarAgenteMissao(string id, AgenteMissaoRequest request)
-    {
-        var agenteMissao = _context.AgenteMissoes
-            .Include(am => am.Agente)
-            .Include(am => am.Missao)
-            .FirstOrDefault(am => am.IdAgenteMissao == id)
-            ?? throw new KeyNotFoundException($"Vínculo AgenteMissao não encontrado com ID: {id}");
-
-        _ = _context.Agentes.Find(request.IdAgente)
-            ?? throw new KeyNotFoundException($"Agente não encontrado com ID: {request.IdAgente}");
-
-        _ = _context.Missoes.Find(request.IdMissao)
-            ?? throw new KeyNotFoundException($"Missão não encontrada com ID: {request.IdMissao}");
-
-        agenteMissao.IdAgente = request.IdAgente;
-        agenteMissao.IdMissao = request.IdMissao;
-        agenteMissao.RelatorioMissao = request.RelatorioMissao;
-
-        _context.SaveChanges();
-
-        // Reload navigation properties
-        _context.Entry(agenteMissao).Reference(am => am.Agente).Load();
-        _context.Entry(agenteMissao).Reference(am => am.Missao).Load();
-
-        return _agenteMissaoMapper.AgenteMissaoToResponse(agenteMissao);
-    }
-
-    public void DeletarAgenteMissao(string id)
-    {
-        var agenteMissao = _context.AgenteMissoes.Find(id)
-            ?? throw new KeyNotFoundException($"Vínculo AgenteMissao não encontrado com ID: {id}");
-
-        _context.AgenteMissoes.Remove(agenteMissao);
-        _context.SaveChanges();
+        if (!await repo.DeleteAsync(id))
+            throw new KeyNotFoundException($"Vínculo AgenteMissão não encontrado com ID: {id}");
     }
 }
+

@@ -16,28 +16,23 @@ public enum StatusMissao
 public class Missao
 {
     [Key]
-    [Column("ID_MISSAO")]
-    public string IdMissao { get; set; }
+    public string IdMissao { get; set; } = string.Empty;
 
-    [Required, MinLength(3), MaxLength(100)]
-    [Column("NM_MISSAO")]
-    public string NomeMissao { get; set; }
+    [Required, MinLength(3), MaxLength(150)]
+    public string NomeMissao { get; set; } = string.Empty;
 
     [Required]
-    [Column("DT_INICIO")]
     public DateOnly DtInicio { get; set; }
 
     [Required]
-    [Column("DURACAO_ESTIMADA")]
-    public int DuracaoEstimada { get; set; } // em dias
+    [Range(1, 3650)]
+    public int DuracaoEstimada { get; set; }
 
-    [Required, MinLength(50), MaxLength(300)]
-    [Column("Descrição")]
-    public string Descricao { get; set; }
+    [Required, MinLength(50), MaxLength(500)]
+    public string Descricao { get; set; } = string.Empty;
 
     [Required]
-    [Column("ST_MISSAO")]
     public StatusMissao Status { get; set; }
 
-    public ICollection<AgenteMissao> AgenteMissoes { get; set; } = new List<AgenteMissao>();
+    public ICollection<AgenteMissao> AgenteMissoes { get; set; } = [];
 }

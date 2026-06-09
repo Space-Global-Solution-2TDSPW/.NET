@@ -16,7 +16,7 @@ public class MissaoRequest
     [Range(1, 3650, ErrorMessage = "Duração deve estar entre 1 e 3650 dias")]
     public int DuracaoEstimada { get; set; }
 
-    [StringLength(500, ErrorMessage = "Descrição deve ter no máximo 500 caracteres")]
+    [StringLength(500, MinimumLength = 50, ErrorMessage = "Descrição deve ter entre 50 e 500 caracteres")]
     public string Descricao { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Status é obrigatório")]
