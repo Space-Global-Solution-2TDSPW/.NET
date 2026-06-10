@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "D:\\Faculdade\\2_Ano\\GS\\.NET\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Faculdade\\2_Ano\\GS\\.NET\\SpaceData\\SpaceData\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SpaceData\\SpaceData\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Faculdade\\2_Ano\\GS\\.NET\\SpaceData\\SpaceData\\Services\\AgenteService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SpaceData\\SpaceData\\Services\\AgenteService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Faculdade\\2_Ano\\GS\\.NET\\SpaceData\\SpaceData\\Repositories\\Repositories.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SpaceData\\SpaceData\\Repositories\\Repositories.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Faculdade\\2_Ano\\GS\\.NET\\SpaceData\\SpaceData\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SpaceData\\SpaceData\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Faculdade\\2_Ano\\GS\\.NET\\SpaceData\\README.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
@@ -34,11 +38,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AgenteService.cs",
+              "DocumentMoniker": "D:\\Faculdade\\2_Ano\\GS\\.NET\\SpaceData\\SpaceData\\Services\\AgenteService.cs",
+              "RelativeDocumentMoniker": "SpaceData\\SpaceData\\Services\\AgenteService.cs",
+              "ToolTip": "D:\\Faculdade\\2_Ano\\GS\\.NET\\SpaceData\\SpaceData\\Services\\AgenteService.cs",
+              "RelativeToolTip": "SpaceData\\SpaceData\\Services\\AgenteService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-09T22:59:40.074Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -48,14 +65,14 @@
               "RelativeDocumentMoniker": "SpaceData\\SpaceData\\Repositories\\Repositories.cs",
               "ToolTip": "D:\\Faculdade\\2_Ano\\GS\\.NET\\SpaceData\\SpaceData\\Repositories\\Repositories.cs",
               "RelativeToolTip": "SpaceData\\SpaceData\\Repositories\\Repositories.cs",
-              "ViewState": "AgIAACIAAAAAAAAAAAAwwJUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABYAAAAAAAAAAAAwwJUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-09T22:58:55.909Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "README.md",
               "DocumentMoniker": "D:\\Faculdade\\2_Ano\\GS\\.NET\\SpaceData\\README.md",
               "RelativeDocumentMoniker": "SpaceData\\README.md",
@@ -68,7 +85,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "SpaceData.csproj",
               "DocumentMoniker": "D:\\Faculdade\\2_Ano\\GS\\.NET\\SpaceData\\SpaceData\\SpaceData.csproj",
               "RelativeDocumentMoniker": "SpaceData\\SpaceData\\SpaceData.csproj",
@@ -81,7 +98,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "appsettings.json",
               "DocumentMoniker": "D:\\Faculdade\\2_Ano\\GS\\.NET\\SpaceData\\SpaceData\\appsettings.json",
               "RelativeDocumentMoniker": "SpaceData\\SpaceData\\appsettings.json",
@@ -94,7 +111,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "D:\\Faculdade\\2_Ano\\GS\\.NET\\SpaceData\\SpaceData\\Data\\AppDbContext.cs",
               "RelativeDocumentMoniker": "SpaceData\\SpaceData\\Data\\AppDbContext.cs",
@@ -107,7 +124,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\Faculdade\\2_Ano\\GS\\.NET\\SpaceData\\SpaceData\\Program.cs",
               "RelativeDocumentMoniker": "SpaceData\\SpaceData\\Program.cs",
