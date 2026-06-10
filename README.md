@@ -263,7 +263,7 @@ Content-Type: application/json
 {
   "nome": "Yuri Gagarin",
   "dtNascimento": "1934-03-09",
-  "status": "Ativo",
+  "status": "1",
   "especialidade": "Piloto de Combate"
 }
 ```
@@ -274,7 +274,7 @@ Content-Type: application/json
   "idAgente": "a3f1c2d4-e5b6-7890-abcd-ef1234567890",
   "nome": "Yuri Gagarin",
   "dtNascimento": "1934-03-09",
-  "status": "Ativo",
+  "status": "1",
   "especialidade": "Piloto de Combate"
 }
 ```
@@ -295,7 +295,7 @@ GET /api/agente
     "idAgente": "a3f1c2d4-e5b6-7890-abcd-ef1234567890",
     "nome": "Yuri Gagarin",
     "dtNascimento": "1934-03-09",
-    "status": "Ativo",
+    "status": "1",
     "especialidade": "Piloto de Combate"
   }
 ]
@@ -316,7 +316,7 @@ GET /api/agente/a3f1c2d4-e5b6-7890-abcd-ef1234567890
   "idAgente": "a3f1c2d4-e5b6-7890-abcd-ef1234567890",
   "nome": "Yuri Gagarin",
   "dtNascimento": "1934-03-09",
-  "status": "Ativo",
+  "status": "1",
   "especialidade": "Piloto de Combate"
 }
 ```
@@ -340,7 +340,7 @@ Content-Type: application/json
 {
   "nome": "Yuri Gagarin",
   "dtNascimento": "1934-03-09",
-  "status": "EmMissao",
+  "status": "3",
   "especialidade": "Exploração Orbital"
 }
 ```
@@ -351,7 +351,7 @@ Content-Type: application/json
   "idAgente": "a3f1c2d4-e5b6-7890-abcd-ef1234567890",
   "nome": "Yuri Gagarin",
   "dtNascimento": "1934-03-09",
-  "status": "EmMissao",
+  "status": "3",
   "especialidade": "Exploração Orbital"
 }
 ```
@@ -370,7 +370,7 @@ Content-Type: application/json
   "dtInicio": "2026-04-12",
   "duracaoEstimada": 1,
   "descricao": "Primeira missão orbital tripulada da história, com objetivo de orbitar a Terra e retornar com segurança.",
-  "status": "Planejada"
+  "status": "1"
 }
 ```
 
@@ -382,7 +382,7 @@ Content-Type: application/json
   "dtInicio": "2026-04-12",
   "duracaoEstimada": 1,
   "descricao": "Primeira missão orbital tripulada da história, com objetivo de orbitar a Terra e retornar com segurança.",
-  "status": "Planejada"
+  "status": "1"
 }
 ```
 
@@ -404,7 +404,7 @@ GET /api/missao
     "dtInicio": "2026-04-12",
     "duracaoEstimada": 1,
     "descricao": "Primeira missão orbital tripulada da história, com objetivo de orbitar a Terra e retornar com segurança.",
-    "status": "Planejada"
+    "status": "1"
   }
 ]
 ```
